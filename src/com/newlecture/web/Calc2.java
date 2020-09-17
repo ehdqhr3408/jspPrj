@@ -1,52 +1,58 @@
 package com.newlecture.web;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/calc")
-public class Calc extends HttpServlet {
+@WebServlet("/calc2")
+public class Calc2 extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        /*답안지*/
+        ServletContext application = req.getServletContext();
+        HttpSession session = req.getSession();
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
 
-        String x_ = req.getParameter("x");
-        String y_ = req.getParameter("y");
+        String v_ = req.getParameter("v");
         String op = req.getParameter("operater");
 
-        int x = 0;
-        int y = 0;
+        int v = 0;
 
-        if (!x_.equals("")) x = Integer.parseInt(x_);
-        if (!y_.equals("")) y = Integer.parseInt(y_);
+        if (!v_.equals("")) v = Integer.parseInt(v_);
 
-        int result = 0;
+        if (op.equals("=")) {
+            // 계산
 
-        if (op.equals("덧셈"))
-            result = x + y;
-        else if (op.equals("뺄셈"))
-            result = x - y;
+            //int x = (Integer)application.getAttribute("value");
+            int x = (Integer)session.getAttribute("value");
+            int y = v;
+            //String operater = (String)application.getAttribute("op");
+            String operater = (String)session.getAttribute("op");
 
-        resp.getWriter().printf("result is %d\n", result);
+            int result = 0;
 
-        /*내가 만든 덧셈계산기*/
+            if (operater.equals("+"))
+                result = x + y;
+            else
+                result = x - y;
 
-        /* resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html; charset=UTF-8");
+            resp.getWriter().printf("result is %d\n", result);
 
-        PrintWriter out = resp.getWriter();
+        } else {
+            // application 저장소에 저장
+            //application.setAttribute("value", v);
+            //application.setAttribute("op", op);
+            session.setAttribute("value", v);
+            session.setAttribute("op", op);
 
-        int num1 = Integer.parseInt(req.getParameter("x"));
-        int num2 = Integer.parseInt(req.getParameter("y"));
-
-        int sum = num1 + num2;
-
-        out.println("계산 결과 : " + sum);*/
+        }
     }
+
+
 }
