@@ -17,7 +17,13 @@ public class Nana extends HttpServlet {
         //받을때 타입 지정
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter out = resp.getWriter();
-        for(int i=0;i<100;i++){
+
+        String cnt_ = req.getParameter("cnt");
+        int cnt = 100;
+        if(cnt_ != null && !cnt_.equals(""))
+            cnt = Integer.parseInt(cnt_);
+
+        for(int i=0;i<cnt;i++){
             out.println((i+1)+": 안녕 Servlet!!<br>");
         }
     }
