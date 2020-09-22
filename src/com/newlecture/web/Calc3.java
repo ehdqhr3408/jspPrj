@@ -48,11 +48,13 @@ public class Calc3 extends HttpServlet {
             exp += (dot == null)?"":dot;
         }
 
-        Cookie expCoookie = new Cookie("exp", exp);
+        Cookie expCookie = new Cookie("exp", exp);
         //쿠키 값 삭제되는 조건 추가
         if(operator != null && operator.equals("C"))
-            expCoookie.setMaxAge(0);
-        resp.addCookie(expCoookie);
+            expCookie.setMaxAge(0);
+
+        expCookie.setPath("/calc3");
+        resp.addCookie(expCookie);
         resp.sendRedirect("calcpage");
 
     }
