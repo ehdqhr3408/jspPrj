@@ -38,6 +38,10 @@ public class Calc3 extends HttpServlet {
                 e.printStackTrace();
             }
         }
+        //쿠키 값 지우는 조건 추가
+        else if(operator != null && operator.equals("C")) {
+            exp = "";
+        }
         else{
             exp += (value == null)?"":value;
             exp += (operator == null)?"":operator;
@@ -45,7 +49,9 @@ public class Calc3 extends HttpServlet {
         }
 
         Cookie expCoookie = new Cookie("exp", exp);
-
+        //쿠키 값 삭제되는 조건 추가
+        if(operator != null && operator.equals("C"))
+            expCoookie.setMaxAge(0);
         resp.addCookie(expCoookie);
         resp.sendRedirect("calcpage");
 
