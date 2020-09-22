@@ -5,80 +5,87 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 
-@WebServlet("/calc3")
-public class Calc3 extends HttpServlet {
+@WebServlet("/calcpage")
+public class CalcPage extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        ServletContext application = req.getServletContext();
-        HttpSession session = req.getSession();
-        resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html; charset=UTF-8");
+        String exp ="0";
         Cookie[] cookies = req.getCookies();
 
-        String v_ = req.getParameter("v");
-        String op = req.getParameter("operater");
-
-        int v = 0;
-
-        if (!v_.equals("")) v = Integer.parseInt(v_);
-
-        if (op.equals("=")) {
-            // 계산
-
-            //int x = (Integer)application.getAttribute("value");
-            //int x = (Integer)session.getAttribute("value");
-            int x = 0;
+        if(cookies != null)
             for(Cookie c : cookies){
-                if(c.getName().equals("value")){
-                    x = Integer.parseInt(c.getValue());
+                if(c.getName().equals("exp")){
+                    exp = c.getValue();
                     break;
                 }
             }
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = resp.getWriter();
+        //out.write("< !DOCTYPE html >");
+        out.write("<html>");
+        out.write("<head >");
+        out.write("<meta charset = \"UTF-8\">");
+        out.write("<title > Title </title >");
+        out.write("<style >");
+        out.write("input {");
+        out.write("width: 50 px;");
+        out.write("height: 50 px;");
+        out.write("}");
 
-            int y = v;
-            //String operater = (String)application.getAttribute("op");
-            //String operater = (String)session.getAttribute("op");
-            String operator ="";
-            for(Cookie c : cookies){
-                if(c.getName().equals("op")){
-                    operator = c.getValue();
-                    break;
-                }
-            }
-            int result = 0;
-
-            if (operator.equals("+"))
-                result = x + y;
-            else
-                result = x - y;
-
-            resp.getWriter().printf("result is %d\n", result);
-
-        } else {
-            // application 저장소에 저장
-            //application.setAttribute("value", v);
-            //application.setAttribute("op", op);
-
-            //session애 저장
-            //session.setAttribute("value", v);
-            //session.setAttribute("op", op);
-
-            Cookie valueCookie = new Cookie("value", String.valueOf(v));
-            valueCookie.setPath("calc2");
-            valueCookie.setMaxAge(24*60*60);
-
-            Cookie opCookie = new Cookie("op", op);
-            opCookie.setPath("/calc2");
-            valueCookie.setMaxAge(24*60*60);
-
-            resp.addCookie(valueCookie);
-            resp.addCookie(opCookie);
-
-            resp.sendRedirect("calc2.html");
-        }
-    }
-
-
+        out.write(".output {");
+        out.write("height: 50 px;");
+        out.write("background: #e9e9e9;");
+        out.write("font - size:24 px;");
+        out.write("font - weight:bold;");
+        out.write("text - align:right;");
+        out.write("padding: 0 px 5 px;");
+        out.write("}");
+        out.write("</style >");
+        out.write("</head >");
+        out.write("<body >");
+        out.write("<div >");
+        out.write("<form action = \"calc3\"method = \"post\">");
+        out.write("<table >");
+        out.write("<tr >");
+        out.printf("<td class= \"output\"colspan = \"4\"> %s </td >", exp);
+        out.write("<tr >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"CE\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"C\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"BS\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"/\"/ ></td >");
+        out.write("</tr >");
+        out.write("<tr >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"7\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"8\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"9\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"*\"/ ></td >");
+        out.write("</tr >");
+        out.write("<tr >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"4\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"5\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"6\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"-\"/ ></td >");
+        out.write("</tr >");
+        out.write("<tr >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"1\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"2\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"3\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"+\"/ ></td >");
+        out.write("</tr >");
+        out.write("<tr >");
+        out.write("<td ></td >");
+        out.write("<td ><input type = \"submit\"name = \"value\"value = \"0\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"dot\"value = \".\"/ ></td >");
+        out.write("<td ><input type = \"submit\"name = \"operator\"value = \"=\" /></td >");
+        out.write("</tr >");
+        out.write("</table >");
+        out.write("</form >");
+        out.write("</div >");
+        out.write("</body >");
+        //out.write("/html >");
+   }
 }
